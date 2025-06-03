@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!--
+        OAuthService Bean
+        This bean provides a utility service for obtaining OAuth 2.0 access tokens
+        using the Client Credentials flow. It is referenced by other components that
+        need authenticated access to Hyland APIs.
+    -->
+	<bean id="oauthService" class="org.alfresco.repo.jscript.auth.OAuthService">
+		<!-- OAuth 2.0 token endpoint, defined in alfresco-global.properties -->
+		<property name="oauthUrl" value="${hyland.oauth.url}"/>
+		<!-- OAuth 2.0 client credentials -->
+		<property name="clientId" value="${hyland.clientId}"/>
+		<property name="clientSecret" value="${hyland.clientSecret}"/>
+	</bean>
+
+	<!--
+        HylandProcessScript Bean
+        Exposes a custom root JavaScript object `hylandProcess` into the Alfresco scripting environment.
+        This object allows scripts to start processes in Hyland Automate using authenticated HTTP calls.
+    -->
+	<bean id="hylandProcessScript" parent="baseJavaScriptExtension"
+		  class="org.alfresco.repo.jscript.HylandProcessScript">
+		<!-- JavaScript object name used in scripts: hylandProcess.startProcess(...) -->
+		<property name="extensionName" value="hylandProcess" />
+		<!-- Inject the OAuth service bean for authenticated requests -->
+		<property name="oauthService" ref="oauthService"/>
+		<!-- Hyland Automate API base URL, injected from configuration -->
+		<property name="apiUrl" value="${hyland.api.url}"/>
+	</bean>
+
+</beans>
