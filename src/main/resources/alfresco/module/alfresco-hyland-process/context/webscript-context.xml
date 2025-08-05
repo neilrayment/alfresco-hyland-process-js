@@ -32,8 +32,8 @@
 		<!-- OAuth 2.0 token endpoint, defined in alfresco-global.properties -->
 		<property name="oauthUrl" value="${hyland.oauth.url}"/>
 		<!-- OAuth 2.0 client credentials -->
-		<property name="clientId" value="${hyland.clientId}"/>
-		<property name="clientSecret" value="${hyland.clientSecret}"/>
+		<property name="clientId" value="${hyland.oauth.clientId}"/>
+		<property name="clientSecret" value="${hyland.oauth.secret}"/>
 	</bean>
 
 	<!--

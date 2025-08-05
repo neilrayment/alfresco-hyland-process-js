@@ -26,9 +26,28 @@ var vars = {
 logger.log(hylandProcess.startProcess("Process_1748835392417", vars));
 ```
 
+
+
 * The first argument is the process definition key defined in Hyland Automate.
 * The second argument is a plain JS object (automatically converted to a JSON payload).
 * Returns `true` if the process was successfully triggered (HTTP 2xx).
+
+
+If you want to call a different process from the default process application set in alfresco-global.properties file
+you can set the apiUrl in the javascript using the overloaded startProcess method:
+
+```javascript
+var vars = {
+    invoiceNumber: document.properties["sap:invoiceNo"],
+    amount:        parseFloat(document.properties["sap:amount"] || 0),
+    customFlag:    true
+};
+var apiUrl = "https://studio.experience.hyland.com/<process-app>/rb/v1/process-instances"
+
+logger.log(hylandProcess.startProcess(apiUrl, "Process_1748835392417", vars));
+```
+N.B. The same external application service user is used as the default configured in the alfresco-global.properties file
+
 
 ## Configuration
 

@@ -36,6 +36,8 @@ public class HylandProcessScript extends BaseScopableProcessorExtension {
      * @param variables   A JavaScript object (converted to a Java Map) of key-value pairs for the process payload.
      * @return true if the process was successfully started; false otherwise.
      */
+
+     // Method to use apiUrl in alfresco-global.properties config
     public boolean startProcess(String processKey, Object variables) throws Exception {
 
         // Convert the JS object (NativeObject) into a Java Map
@@ -43,8 +45,25 @@ public class HylandProcessScript extends BaseScopableProcessorExtension {
         if (variables instanceof NativeObject) {
             vars.putAll((NativeObject) variables);
         }
+        
 
         return invokeProcess(processKey, vars);
+
+        
+    }
+    // Method to use apiUrl from the javascript
+     public boolean startProcess(String apiUrl, String processKey, Object variables) throws Exception {
+
+        // Convert the JS object (NativeObject) into a Java Map
+        Map<String, Object> vars = new LinkedHashMap<>();
+        if (variables instanceof NativeObject) {
+            vars.putAll((NativeObject) variables);
+        }
+        setApiUrl(apiUrl); 
+
+        return invokeProcess(processKey, vars);
+
+        
     }
 
     /**
